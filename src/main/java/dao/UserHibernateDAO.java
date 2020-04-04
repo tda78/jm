@@ -8,15 +8,17 @@ import org.hibernate.Transaction;
 import org.hibernate.service.ServiceRegistry;
 import util.DBHelper;
 
+import java.io.IOException;
 import java.util.List;
 
 public class UserHibernateDAO implements UserDAO {
 
     private static SessionFactory sessionFactory;
 
-    public UserHibernateDAO(){
+    public UserHibernateDAO() throws IOException {
         sessionFactory = getSessionFactory();
     }
+
     @Override
     public List<User> getAllUsers() {
         Session session = sessionFactory.openSession();
@@ -53,7 +55,6 @@ public class UserHibernateDAO implements UserDAO {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         session.update(user);
-
         transaction.commit();
         session.close();
 
@@ -69,7 +70,7 @@ public class UserHibernateDAO implements UserDAO {
         session.close();
     }
 
-    private  SessionFactory getSessionFactory (){
+    private  SessionFactory getSessionFactory () throws IOException {
         if(sessionFactory == null){
             sessionFactory = DBHelper.getSessionFactory();
         }

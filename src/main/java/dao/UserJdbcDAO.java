@@ -2,6 +2,7 @@ package dao;
 
 
 import model.User;
+import util.DBHelper;
 import util.PropertyReader;
 
 import java.sql.*;
@@ -78,23 +79,6 @@ public class UserJdbcDAO implements UserDAO{
         statement.close();
     }
     private static Connection getMysqlConnection() throws Exception {
-        try {
-            Properties properties = PropertyReader.read();
-            final String uRL = properties.getProperty("db.Url");
-            final String login = properties.getProperty("db.Login");
-            final String password = properties.getProperty("db.Password");
-            final String driver = properties.getProperty("db.Driver");
-            Class.forName(driver);
-            connection = DriverManager.getConnection(uRL, login, password);
-            //Connection connection = DriverManager.getConnection(url.toString());
-
-            return connection;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new IllegalStateException();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            throw e;
-        }
+        return DBHelper.getConnection();
     }
 }

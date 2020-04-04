@@ -1,5 +1,6 @@
 package service;
 import dao.UserDAO;
+import dao.UserDaoFactory;
 import dao.UserHibernateDAO;
 import dao.UserJdbcDAO;
 import exception.DBException;
@@ -15,7 +16,7 @@ public class UserService {
 
     static {
         try {
-            dao = new UserHibernateDAO();
+            dao = UserDaoFactory.getDao();
         } catch (Exception e) {
             e.printStackTrace();
         }
