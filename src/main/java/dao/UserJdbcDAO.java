@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-public class UserJdbcDAO implements UserDAO{
+public class UserJdbcDAO implements UserDAO {
 
     private static Connection connection;
 
@@ -32,11 +32,29 @@ public class UserJdbcDAO implements UserDAO{
             users.add(new User(
                     result.getLong(1),
                     result.getString(2),
-                    result.getString(3)));
+                    result.getString(3),
+                    result.getString(4))
+            );
         }
         result.close();
         statement.close();
         return users;
+    }
+
+    @Override
+    public User getUserByName(String name) throws SQLException {
+        Statement statement = connection.createStatement();
+        statement.execute("select * from users where name='" + name + "'");
+        ResultSet result = statement.getResultSet();
+        result.next();
+        User user = new User(
+                result.getLong("id"),
+                result.getString("name"),
+                result.getString("password"),
+                result.getString("role")
+        );
+        result.close();
+        return user;
     }
 
   /*  public boolean validateClient(String name, String password) throws SQLException {
@@ -51,26 +69,29 @@ public class UserJdbcDAO implements UserDAO{
         User user = new User(
                 result.getLong("id"),
                 result.getString("name"),
-                result.getString("password")
+                result.getString("password"),
+                result.getString("role")
         );
         result.close();
         return user;
     }
 
-    public void addUser(String name, String password) throws SQLException {
-        execUpdate("insert into users (name, password) VALUES ('"
+    public void addUser(String name, String password, String role) throws SQLException {
+        execUpdate("insert into users (name, password, role) VALUES ('"
                 + name + "','"
-                + password + "');");
+                + password + "','"
+                + role + "');");
     }
 
-    public void updateUser(String id, String name, String password) throws SQLException {
+    public void updateUser(String id, String name, String password, String role) throws SQLException {
         execUpdate("update users set name='" + name
-                +"',password='" + password+
-                "' where id = '" + id + "';");
+                + "',password='" + password
+                + "',role='" + role
+                + "' where id = '" + id + "';");
     }
 
     public void deleteUser(String id) throws SQLException {
-        execUpdate("delete from users where id=" + id +";");
+        execUpdate("delete from users where id=" + id + ";");
     }
 
     private void execUpdate(String update) throws SQLException {
@@ -78,6 +99,7 @@ public class UserJdbcDAO implements UserDAO{
         statement.execute(update);
         statement.close();
     }
+
     private static Connection getMysqlConnection() throws Exception {
         return DBHelper.getConnection();
     }

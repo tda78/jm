@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet("/update")
+@WebServlet("/admin/update")
 public class UpdateServlet extends HttpServlet {
     public void doGet(HttpServletRequest request,
                       HttpServletResponse response) throws ServletException, IOException {
@@ -23,6 +23,7 @@ public class UpdateServlet extends HttpServlet {
             request.setAttribute("userID","");
             request.setAttribute("userName", "name");
             request.setAttribute("userPassword", "password");
+            request.setAttribute("userRole", "user");
             getServletContext().getRequestDispatcher("/update.jsp").forward(request, response);
 //            response.setStatus(HttpServletResponse.SC_OK);
 
@@ -33,6 +34,7 @@ public class UpdateServlet extends HttpServlet {
                 request.setAttribute("userName", user.getName());
                 request.setAttribute("userPassword", user.getPassword());
                 request.setAttribute("userID", user.getId());
+                request.setAttribute("userRole", user.getRole());
 
                 getServletContext().getRequestDispatcher("/update.jsp").forward(request, response);
  //               response.setStatus(HttpServletResponse.SC_OK);
@@ -49,15 +51,15 @@ public class UpdateServlet extends HttpServlet {
                        HttpServletResponse response) throws ServletException, IOException {
         try {
             String userName = request.getParameter("name");
-
             String userPassword = request.getParameter("password");
+            String userRole = request.getParameter("role");
             if (request.getParameter("userID") == "") {
 
-                UserService.getInstance().addUser(userName,userPassword);
+                UserService.getInstance().addUser(userName,userPassword,userRole);
             }
             else {
                 UserService.getInstance().updateUser(
-                        request.getParameter("userID"), userName,userPassword);
+                        request.getParameter("userID"), userName,userPassword, userRole);
             }
             List<User> users = UserService.getInstance().getAllUsers();
             request.setAttribute("users",users);

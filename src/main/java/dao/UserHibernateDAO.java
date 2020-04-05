@@ -9,6 +9,7 @@ import org.hibernate.service.ServiceRegistry;
 import util.DBHelper;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 public class UserHibernateDAO implements UserDAO {
@@ -30,6 +31,19 @@ public class UserHibernateDAO implements UserDAO {
     }
 
     @Override
+    public User getUserByName(String name) throws SQLException {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        Query query = session.createQuery("FROM User WHERE name='"
+                + name + "';");
+        User user = (User) query.list().get(0);
+        transaction.commit();
+        session.close();
+        return user;
+
+    }
+
+    @Override
     public User getUser(long id) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -40,8 +54,8 @@ public class UserHibernateDAO implements UserDAO {
     }
 
     @Override
-    public void addUser(String name, String password) {
-        User user = new User(name, password);
+    public void addUser(String name, String password, String role) {
+        User user = new User(name, password, role);
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         session.save(user);
@@ -50,8 +64,8 @@ public class UserHibernateDAO implements UserDAO {
     }
 
     @Override
-    public void updateUser(String id, String name, String password) {
-        User user = new User(Long.parseLong(id), name, password);
+    public void updateUser(String id, String name, String password, String role) {
+        User user = new User(Long.parseLong(id), name, password, role);
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         session.update(user);

@@ -13,6 +13,15 @@ import java.util.List;
 public class UserService {
 
     private static UserDAO dao;
+    private User tempUser;
+
+    public User getTempUser() {
+        return tempUser;
+    }
+
+    public void setTempUser(User tempUser) {
+        this.tempUser = tempUser;
+    }
 
     static {
         try {
@@ -32,6 +41,15 @@ public class UserService {
         return userService;
     }
 
+    public User login(String name, String password) throws SQLException {
+        User user = dao.getUserByName(name);
+        if (!user.getPassword().equals(password)){
+            throw new SecurityException("incorrect password");
+        }
+        tempUser = user;
+        return user;
+    }
+
     public List<User> getAllUsers() throws SQLException {
         return dao.getAllUsers();
     }
@@ -46,12 +64,16 @@ public class UserService {
 
     }
 
-    public void addUser(String name, String password) throws SQLException {
-        dao.addUser(name, password);
+    public void addUser(String name, String password, String role) throws SQLException {
+        try {
+            dao.getUserByName(name).getId();
+        } catch (Exception e) {
+            dao.addUser(name, password, role);
+        }
     }
 
-    public void updateUser(String id, String name, String password) throws SQLException {
-        dao.updateUser(id, name, password);
+    public void updateUser(String id, String name, String password, String role) throws SQLException {
+        dao.updateUser(id, name, password, role);
     }
 
       public static void main(String[] args) throws Exception {
