@@ -54,8 +54,7 @@ public class UserHibernateDAO implements UserDAO {
     }
 
     @Override
-    public void addUser(String name, String password, String role) {
-        User user = new User(name, password, role);
+    public void addUser(User user) throws SQLException {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         session.save(user);
@@ -64,14 +63,12 @@ public class UserHibernateDAO implements UserDAO {
     }
 
     @Override
-    public void updateUser(String id, String name, String password, String role) {
-        User user = new User(Long.parseLong(id), name, password, role);
+    public void updateUser(User user) throws SQLException {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         session.update(user);
         transaction.commit();
         session.close();
-
     }
 
     @Override

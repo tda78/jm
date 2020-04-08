@@ -1,7 +1,7 @@
 package servlet;
 
 import model.User;
-import service.UserService;
+import service.UserServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet("/admin/update")
@@ -30,7 +29,7 @@ public class UpdateServlet extends HttpServlet {
         } else {
             try {
                 request.setAttribute("bdMethod", "UPDATE CLIENT");
-                User user = UserService.getInstance().getUser(Long.parseLong(id));
+                User user = UserServiceImpl.getInstance().getUser(Long.parseLong(id));
                 request.setAttribute("userName", user.getName());
                 request.setAttribute("userPassword", user.getPassword());
                 request.setAttribute("userID", user.getId());
@@ -55,13 +54,13 @@ public class UpdateServlet extends HttpServlet {
             String userRole = request.getParameter("role");
             if (request.getParameter("userID") == "") {
 
-                UserService.getInstance().addUser(userName,userPassword,userRole);
+                UserServiceImpl.getInstance().addUser(userName,userPassword,userRole);
             }
             else {
-                UserService.getInstance().updateUser(
+                UserServiceImpl.getInstance().updateUser(
                         request.getParameter("userID"), userName,userPassword, userRole);
             }
-            List<User> users = UserService.getInstance().getAllUsers();
+            List<User> users = UserServiceImpl.getInstance().getAllUsers();
             request.setAttribute("users",users);
             getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
 

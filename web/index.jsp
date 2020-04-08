@@ -3,7 +3,7 @@
 
 <%@ page import="java.util.List" %>
 <%@ page import="model.User" %>
-<%@ page import="service.UserService" %><%--
+<%@ page import="service.UserServiceImpl" %><%--
   Created by IntelliJ IDEA.
   User: Пользователь
   Date: 30.03.2020

@@ -1,7 +1,6 @@
 package servlet;
 
-import com.sun.deploy.net.HttpResponse;
-import service.UserService;
+import service.UserServiceImpl;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -20,7 +19,7 @@ public class FilterAdminServlet implements javax.servlet.Filter{
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         try {
-            if (UserService.getInstance().getTempUser().getRole().equals("user")){
+            if (UserServiceImpl.getInstance().getTempUser().getRole().equals("user")){
                 HttpServletResponse resp = (HttpServletResponse)response;
                 ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_BAD_GATEWAY);
                 ((HttpServletResponse) response).sendRedirect("/user");

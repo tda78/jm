@@ -57,10 +57,6 @@ public class UserJdbcDAO implements UserDAO {
         return user;
     }
 
-  /*  public boolean validateClient(String name, String password) throws SQLException {
-        return getClientByName(name).getPassword().equals(password);
-    }*/
-
     public User getUser(long id) throws SQLException {
         Statement statement = connection.createStatement();
         statement.execute("select * from users where id='" + id + "'");
@@ -76,12 +72,24 @@ public class UserJdbcDAO implements UserDAO {
         return user;
     }
 
-    public void addUser(String name, String password, String role) throws SQLException {
+    @Override
+    public void addUser(User user) throws SQLException {
         execUpdate("insert into users (name, password, role) VALUES ('"
-                + name + "','"
-                + password + "','"
-                + role + "');");
+                + user.getName() + "','"
+                + user.getPassword() + "','"
+                + user.getRole() + "');");
     }
+
+    @Override
+    public void updateUser(User user) throws SQLException {
+        execUpdate("update users set name='" + user.getName()
+                + "',password='" + user.getPassword()
+                + "',role='" + user.getRole()
+                + "' where id = '" + user.getId() + "';");
+
+    }
+
+
 
     public void updateUser(String id, String name, String password, String role) throws SQLException {
         execUpdate("update users set name='" + name

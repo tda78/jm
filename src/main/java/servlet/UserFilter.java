@@ -1,10 +1,9 @@
 package servlet;
 
-import service.UserService;
+import service.UserServiceImpl;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class UserFilter {
@@ -21,7 +20,7 @@ public class UserFilter {
         @Override
         public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
             try {
-                request.setAttribute("user",UserService.getInstance().getTempUser());
+                request.setAttribute("user", UserServiceImpl.getInstance().getTempUser());
             } catch (Exception e) {
                 e.printStackTrace();
             }
