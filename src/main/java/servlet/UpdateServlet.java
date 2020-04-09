@@ -52,14 +52,17 @@ public class UpdateServlet extends HttpServlet {
             String userName = request.getParameter("name");
             String userPassword = request.getParameter("password");
             String userRole = request.getParameter("role");
-            if (request.getParameter("userID") == "") {
+            String id = request.getParameter("userID");
 
-                UserServiceImpl.getInstance().addUser(userName,userPassword,userRole);
+            if (id == "") {
+                User user = new User(userName, userPassword, userRole);
+                UserServiceImpl.getInstance().addUser(user);
             }
             else {
-                UserServiceImpl.getInstance().updateUser(
-                        request.getParameter("userID"), userName,userPassword, userRole);
+                User user = new User(Long.parseLong(id), userName, userPassword, userRole);
+                UserServiceImpl.getInstance().updateUser(user);
             }
+
             List<User> users = UserServiceImpl.getInstance().getAllUsers();
             request.setAttribute("users",users);
             getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);

@@ -62,16 +62,16 @@ public class UserServiceImpl implements UserService{
 
     }
 
-    public void addUser(String name, String password, String role) throws SQLException {
+    public void addUser(User user) throws SQLException {
         try {
-            dao.getUserByName(name).getId();
+            dao.getUserByName(user.getName()).getId();
         } catch (Exception e) {
-            dao.addUser(new User(name, password, role));
+            dao.addUser(user);
         }
     }
 
-    public void updateUser(String id, String name, String password, String role) throws SQLException {
-        dao.updateUser(new User(Long.parseLong(id), name, password, role));
+    public void updateUser(User user) throws SQLException {
+        dao.updateUser(user);
     }
 
  /*     public static void main(String[] args) throws Exception {
